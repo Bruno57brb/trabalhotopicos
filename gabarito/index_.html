@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS</title>
+</head>
+<body>
+    <h1 onmouseenter="trocaCor()" onmouseleave="trocaCor2()">Título do texto</h1>
+    <p class="conteudo">conteúdo do documento</p>
+    <div class="conteudo">div com conteudo</div>
+    <div id="texto"></div>
+
+    <button onclick="trocaPlanoFundo()">Trocar plano de fundo</button>
+    <button onclick="verificaValores()">Calcular Média</button>
+    
+    <script>
+        function trocaPlanoFundo() {
+            let conteudos = document.getElementsByClassName("conteudo");
+            for (let i = 0; i < conteudos.length; i++) {
+                const conteudo = conteudos[i];
+                conteudo.style.backgroundColor = "red";
+            }
+        }
+
+        mostrarBoasVindas();
+
+        function mostrarBoasVindas() {
+            alert("Bem Vindo!");
+        }
+
+        function trocaCor2() {
+            let h1s = document.getElementsByTagName("h1");
+            let h1 = h1s[0];
+            h1.style.color = "black";
+        }
+        function trocaCor() {
+            let h1s = document.getElementsByTagName("h1");
+            let h1 = h1s[0];
+            h1.style.color = "#00bcd4";
+        }
+
+        function media() {
+            let nota1 = 8;
+            let nota2 = 7;
+            let nota3 = 5;
+            let media = (nota1 + nota2 + nota3) / 3;
+            console.log(media);
+            document.getElementById("texto").innerText = 
+                    //"A média é: " + media;
+                    `A média é: ${media}`;
+        }
+        function verificaValores() {
+            let num = 5;
+            if (num == "5") {
+                document.getElementById("texto").innerText = 
+                    "É verdadeiro";
+            }
+        }
+    </script>
+</body>
+</html>

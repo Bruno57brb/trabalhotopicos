@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogos de Tabuleiro</title>
+  <!-- Importando Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <!-- Ícones do Materialize -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="#!" class="brand-logo">Jogos de Tabuleiro</a>
+      <a href="#" data-target="mobile-menu" class="sidenav-trigger">
+        <i class="material-icons">menu</i>
+      </a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#jogos">Jogos</a></li>
+        <li><a href="index_cad.html">Cadastro</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Menu Responsivo -->
+  <ul class="sidenav" id="mobile-menu">
+    <li><a href="#jogos">Jogos</a></li>
+    <li><a href="index_cad.html">Cadastro</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+
+  <!-- Banner -->
+  <div class="parallax-container">
+    <div class="parallax"><img src="tela.webp" alt="Jogos de Tabuleiro"></div>
+    <div class="container center-align white-text" style="padding: 100px 0;">
+      <h3>Bem-vindo ao Mundo dos Jogos de Tabuleiro!</h3>
+      <p>Explore, jogue e divirta-se com amigos e família.</p>
+    </div>
+  </div>
+
+  <!-- Seção de Jogos -->
+  <div id="jogos" class="container section">
+    <h4 class="center">Jogos em Destaque</h4>
+    <div class="row">
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="xadrez.jpg">
+            <span class="card-title">Xadrez</span>
+          </div>
+          <div class="card-content">
+            <p>Um jogo clássico de estratégia para testar suas habilidades mentais.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="mono.avif">
+            <span class="card-title">Monopoly</span>
+          </div>
+          <div class="card-content">
+            <p>Compre, venda e negocie para se tornar o magnata do tabuleiro.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="jogo-de-damas-1.jpg">
+            <span class="card-title">Damas</span>
+          </div>
+          <div class="card-content">
+            <p>Simples, mas desafiador, perfeito para uma tarde relaxante.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <h5 class="white-text">Sobre</h5>
+          <p class="grey-text text-lighten-4">Este site é dedicado aos amantes de jogos de tabuleiro, oferecendo informações e sugestões para horas de diversão.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        © 2024 Jogos de Tabuleiro
+        <a class="grey-text text-lighten-4 right" href="#!">Mais Links</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Importando Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    // Inicializando componentes do Materialize
+    document.addEventListener('DOMContentLoaded', function () {
+      const elemsSidenav = document.querySelectorAll('.sidenav');
+      M.Sidenav.init(elemsSidenav);
+
+      const elemsParallax = document.querySelectorAll('.parallax');
+      M.Parallax.init(elemsParallax);
+    });
+  </script>
+</body>
+</html>

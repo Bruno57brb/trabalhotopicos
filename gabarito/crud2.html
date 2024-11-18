@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+</head>
+
+<body>
+    <form id="form" onsubmit="return salvarPessoa(event);">
+        <label>ID: <input type="number" name="id" readonly></label><br>
+        <label>Nome: <input type="text" name="nome"></label><br>
+        <label>CPF: <input onblur="cpfValido()" onkeyup="return mascaraCPF(event)" type="text" name="cpf"></label><br>
+        <input type="submit" value="Salvar Pessoa">
+    </form>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th colspan="2">Opções</th>
+            </tr>
+        </thead>
+        <tbody id="pessoas">
+            <tr>
+                <td>1</td>
+                <td>Thiago</td>
+                <td>123.456.789-00</td>
+                <td><button onclick="editar(evt)">Editar</button></td>
+                <td>Excluir</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        function editar(evt) {
+            let id = evt.currentTarget.paramId;
+            let tBody = document.getElementById("pessoas");
+            for (const tr of tBody.children) {
+                if (tr.children[0].innerHTML == id) {
+                    let id = document.getElementsByName("id")[0];
+                    let nome = document.getElementsByName("nome")[0];
+                    let cpf = document.getElementsByName("cpf")[0];
+                    id.value = tr.children[0].innerHTML;
+                    nome.value = tr.children[1].innerHTML;
+                    cpf.value = tr.children[2].innerHTML;
+                }
+            }
+        }
+
+        function salvarPessoa(event) {
+            event.preventDefault();
+            let form = document.getElementById("form");
+            let pessoa = Object.fromEntries(new FormData(form).entries());
+            // verificar se eh inserir
+            if (pessoa.id == "") {
+                fetch('salvar.php', {
+                    method: "POST",
+                    body: JSON.stringify(pessoa),
+                    headers: { 'Content-Type': "application/json; charset=UTF-8" },
+                })
+                    .then(response => response.json())
+                    .then(pessoa => inserirPessoa(pessoa))
+                    .catch(err => console.log(err));
+            } else {
+                fetch('salvar.php', {
+                    method: "PUT",
+                    body: JSON.stringify(pessoa),
+                    headers: { 'Content-Type': "application/json; charset=UTF-8" },
+                })
+                    .then(response => response.json())
+                    .then(pessoa => alterarPessoa(pessoa))
+                    .catch(err => console.log(err));
+            }
+            form.reset();
+            return false;
+        }
+
+        function inserirPessoa(pessoa) {
+            let tr = document.createElement("tr");
+            let tdId = document.createElement("td");
+            tdId.innerText = pessoa.id;
+            let tdNome = document.createElement("td");
+            tdNome.innerText = pessoa.nome;
+            let tdCpf = document.createElement("td");
+            tdCpf.innerText = pessoa.cpf;
+            let tdEditar = document.createElement("td");
+
+            let btnEditar = document.createElement("button");
+            btnEditar.addEventListener("click", editar, false);
+            btnEditar.paramId = pessoa.id;
+            btnEditar.innerHTML = "Editar";
+            tdEditar.appendChild(btnEditar);
+
+            let tdExcluir = document.createElement("td");
+            let btnExcluir = document.createElement("button");
+            btnExcluir.addEventListener("click", excluir, false);
+            btnExcluir.paramId = pessoa.id;
+            btnExcluir.innerHTML = "Excluir";
+            tdExcluir.appendChild(btnExcluir);
+
+
+            tr.appendChild(tdId);
+            tr.appendChild(tdNome);
+            tr.appendChild(tdCpf);
+            tr.appendChild(tdEditar);
+            tr.appendChild(tdExcluir);
+            let tBody = document.getElementById("pessoas");
+            tBody.appendChild(tr);
+        }
+
+        function alterarPessoa(pessoa) {
+            let tBody = document.getElementById("pessoas");
+            for (const tr of tBody.children) {
+                if (tr.children[0].innerHTML == pessoa.id) {
+                    tr.children[1].innerHTML = pessoa.nome;
+                    tr.children[2].innerHTML = pessoa.cpf;
+                    break;
+                }
+            }
+        }
+
+        function excluir(evt) {
+            let excluir = confirm("Tem certeza que deseja excluir essa pessoa?");
+            if (excluir == true) {
+                let id = evt.currentTarget.paramId;
+                fetch('excluir.php', {
+                    method: "DELETE",
+                    body: '{"id":' + id + '}',
+                    headers: { 'Content-Type': "application/json; charset=UTF-8" },
+                })
+                    .then(response => response.json())
+                    .then(() => {
+                        let tBody = document.getElementById("pessoas");
+                        for (const tr of tBody.children) {
+                            if (tr.children[0].innerHTML == id) {
+                                tBody.removeChild(tr);
+                            }
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+        }
+
+        function maskCpf() {
+            let inputs = document.getElementsByTagName("input");
+            let v = inputs[2].value;
+
+            //Remove tudo o que não é dígito
+            v = v.replace(/\D/g, "");
+            //Coloca um ponto entre o terceiro e o quarto dígitos
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            //Coloca um ponto entre o terceiro e o quarto dígitos
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            //de novo (para o segundo bloco de números)
+            //Coloca um hífen entre o terceiro e o quarto dígitos
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            inputs[2].value = v;
+        }
+
+        function cpfValido() {
+            let inputs = document.getElementsByTagName("input");
+            let v = inputs[2].value;
+            let valido = validaCpf(v);
+            if (valido == true) {
+                console.log("CPF Válido");
+            } else {
+                console.log("CPF Inválido");
+            }
+        }
+
+        function mascaraCPF(event) {
+            let inputCPF = document.getElementsByTagName("input")[2];
+            if (event.key != "Backspace") {
+                if (inputCPF.value.length == 3 || inputCPF.value.length == 7) {
+                    inputCPF.value += ".";
+                } else if (inputCPF.value.length == 11) {
+                    inputCPF.value += "-";
+                }
+            }
+        }
+
+        function validaCpf(strCPF) {
+            let soma;
+            let resto;
+            soma = 0;
+            if (strCPF == "00000000000" ||
+                strCPF == "11111111111" ||
+                strCPF == "22222222222" ||
+                strCPF == "33333333333" ||
+                strCPF == "44444444444" ||
+                strCPF == "55555555555" ||
+                strCPF == "66666666666" ||
+                strCPF == "77777777777" ||
+                strCPF == "88888888888" ||
+                strCPF == "99999999999") return false;
+
+            for (i = 1; i <= 9; i++) soma = soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+            resto = (soma * 10) % 11;
+
+            if ((resto == 10) || (resto == 11)) resto = 0;
+            if (resto != parseInt(strCPF.substring(9, 10))) return false;
+
+            soma = 0;
+            for (i = 1; i <= 10; i++) soma = soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+            resto = (soma * 10) % 11;
+
+            if ((resto == 10) || (resto == 11)) resto = 0;
+            if (resto != parseInt(strCPF.substring(10, 11))) return false;
+            return true;
+        }
+    </script>
+</body>
+
+</html>
